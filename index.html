@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .filters {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filters button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #333;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .filters button:hover {
+      background-color: #555;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+
+    .close, .prev, .next {
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+    }
+
+    .close {
+      right: 30px;
+    }
+
+    .prev {
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .next {
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    @media (max-width: 600px) {
+      .filters button {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Image Gallery</h1>
+
+  <div class="filters">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('city')">City</button>
+    <button onclick="filterImages('animals')">Animals</button>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <img src="nature.jpg" class="nature" onclick="openLightbox(0)" />
+    <img src="city.webp" class="city" onclick="openLightbox(1)" />
+    <img src="animal.jpg" class="animals" onclick="openLightbox(2)" />
+    <img src="nature2.jpg" class="nature" onclick="openLightbox(3)" />
+    <img src="city2.jpg" class="city" onclick="openLightbox(4)" />
+    <img src="animal2.jpg" class="animals" onclick="openLightbox(5)" />
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">&times;</span>
+    <span class="prev" onclick="prevImage()">&#10094;</span>
+    <img id="lightbox-img" src="" alt="" />
+    <span class="next" onclick="nextImage()">&#10095;</span>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll(".gallery img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightbox.style.display = "flex";
+      lightboxImg.src = images[index].src;
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    function filterImages(category) {
+      images.forEach(img => {
+        if (category === 'all' || img.classList.contains(category)) {
+          img.style.display = "block";
+        } else {
+          img.style.display = "none";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
